@@ -11,7 +11,7 @@ function playerSelection(){
   // request input from player
   const playerChoice = prompt('Please type rock, paper, or scissors:);
   
-  // sanitize input then return it
+  // sanitize input prior to returning it
   if (options.some(playerChoice)) {
   return playerChoice.toLowerCase();
   } else {
