@@ -92,7 +92,7 @@ function game(rounds) {
   let wins = 0;
   for (let i = 0; i < rounds; i++) {
     wins += playRound();
-    if (wins === 0) {
+    if (wins === 0 && i === rounds) {
       console.log("Tiebreaker!");
       i--;
     }
