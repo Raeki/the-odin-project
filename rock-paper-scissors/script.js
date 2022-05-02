@@ -34,7 +34,7 @@ if (TEST) {
 
 /**
  * @param {array} arr - an array of valid values to check the user's prompt response against
- * @returns {any} Returns the user's prompt response in lowercase if it matches any values in the array
+ * @returns {string} Returns the user's prompt response in lowercase if it matches any values in the array
  */
 function playerSelection() {
   let playerChoice;
@@ -47,3 +47,7 @@ function playerSelection() {
 
 // playerSelection TDD:
 // difficult to test using TDD
+
+/**
+ * @returns {string} returns a string describing the winner of the current match
+ */
