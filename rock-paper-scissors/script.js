@@ -1,21 +1,49 @@
-// create array of valid inputs
-const options = ["rock", "paper", "scissors"];
+// set true to run TDD tests
+const TEST = false;
 
-// returns a random input for the computer to play
-function computerPlay() {
-  return options[Math.floor(Math.random() * options.length)]
-}
-
-// prompt the human player for their choice and return a sanitized version
-function playerSelection(){
-  // request input from player
-  const playerChoice = prompt('Please type rock, paper, or scissors:);
-  
-  // sanitize input prior to returning it
-  if (options.some(playerChoice)) {
-  return playerChoice.toLowerCase();
+function test(actual, expected) {
+  if (JSON.stringify(actual) === JSON.stringify(expected)) {
+    console.log("Yay! Test PASSED.");
   } else {
-    throw 'Please choose rock, paper, or scissors.';
+    console.error("Test FAILED. Keep trying!");
+    console.log("    actual: ", actual);
+    console.log("  expected: ", expected);
+    console.trace();
   }
 }
 
+// create array of valid inputs
+const options = ["rock", "paper", "scissors"];
+
+/**
+ * @param {array} arr - an array of values to select from randomly
+ * @returns {any} Returns a random value from an array
+ */
+
+function computerPlay(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+// computerPlay TDD:
+if (TEST) {
+  test(
+    true,
+    options.some(val => val === computerPlay(options))
+  );
+}
+
+/**
+ * @param {array} arr - an array of valid values to check the user's prompt response against
+ * @returns {any} Returns the user's prompt response in lowercase if it matches any values in the array
+ */
+function playerSelection() {
+  let playerChoice;
+
+  while (!options.some(val => val === playerChoice)) {
+    playerChoice = prompt("Please type rock, paper, or scissors:");
+  }
+  return playerChoice.toLowerCase();
+}
+
+// playerSelection TDD:
+// Cannot be tested using TDD
