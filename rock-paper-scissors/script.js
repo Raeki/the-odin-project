@@ -8,9 +8,12 @@ function computerPlay() {
 
 // prompt the human player for their choice and return a sanitized version
 function playerSelection(){
+  // request input from player
   const playerChoice = prompt('Please type rock, paper, or scissors:);
-  if (options.some(prompt)) {
-  return prompt.toLowerCase();
+  
+  // sanitize input then return it
+  if (options.some(playerChoice)) {
+  return playerChoice.toLowerCase();
   } else {
     throw 'Please choose rock, paper, or scissors.';
   }
