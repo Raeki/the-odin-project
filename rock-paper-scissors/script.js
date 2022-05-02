@@ -46,4 +46,4 @@ function playerSelection() {
 }
 
 // playerSelection TDD:
-// Cannot be tested using TDD
+// difficult to test using TDD
