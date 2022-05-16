@@ -2,6 +2,7 @@ const game = {
   playerWins: 0,
   compWins: 0,
   OPTIONS: ["rock", "paper", "scissors"],
+  MAX_WINS: 5,
 
   /**
    * @param {string} choice - player's choice
@@ -10,9 +11,8 @@ const game = {
   play: function (choice) {
     const compChoice = this.computerPlay(this.OPTIONS);
     this.updateWins(this.compareChoices(choice, compChoice));
-    console.log("player:" + choice);
-    console.log("computer:" + compChoice);
     this.updateWinsText();
+    this.checkWins();
   },
 
   /**
@@ -74,14 +74,44 @@ const game = {
     document.getElementById("player-wins").innerText = `${this.playerWins}`;
     document.getElementById("computer-wins").innerText = `${this.compWins}`;
   },
+
+  /**
+   * @returns {number} updates the innerText of IDs player-wins and computer-wins
+   */
+
+  checkWins: function () {
+    if (this.compWins >= this.MAX_WINS) {
+      document.getElementById("winner").innerText = "The computer wins this time.";
+    } else if (this.playerWins >= this.MAX_WINS) {
+      document.getElementById("winner").innerText = "The player wins this time.";
+    }
+  },
+
+  /**
+   * @returns {effect} resets player and computer wins to 0
+   */
+
+  resetGame: function () {
+    this.playerWins = 0;
+    this.compWins = 0;
+    this.updateWinsText();
+    document.getElementById("winner").innerText = "";
+  },
 };
 
+// button click to run game with chosen button value
 document.getElementById("rock").addEventListener("click", function () {
   game.play("rock");
 });
+
 document.getElementById("scissors").addEventListener("click", function () {
   game.play("scissors");
 });
+
 document.getElementById("paper").addEventListener("click", function () {
   game.play("paper");
+});
+
+document.getElementById("reset").addEventListener("click", function () {
+  game.resetGame();
 });
