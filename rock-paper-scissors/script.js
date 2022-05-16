@@ -1,112 +1,87 @@
-function test(actual, expected) {
-  if (JSON.stringify(actual) === JSON.stringify(expected)) {
-    console.log("Yay! Test PASSED.");
-  } else {
-    console.error("Test FAILED. Keep trying!");
-    console.log("    actual: ", actual);
-    console.log("  expected: ", expected);
-    console.trace();
-  }
-}
-// set true to run TDD tests
-const TEST = false;
+const game = {
+  playerWins: 0,
+  compWins: 0,
+  OPTIONS: ["rock", "paper", "scissors"],
 
-// create array of valid inputs
-const options = ["rock", "paper", "scissors"];
+  /**
+   * @param {string} choice - player's choice
+   */
 
-/**
- * @param {array} arr - an array of values to select from randomly
- * @returns {any} Returns a random value from an array
- */
+  play: function (choice) {
+    const compChoice = this.computerPlay(this.OPTIONS);
+    this.updateWins(this.compareChoices(choice, compChoice));
+    console.log("player:" + choice);
+    console.log("computer:" + compChoice);
+    this.updateWinsText();
+  },
 
-function computerPlay(arr) {
-  return arr[Math.floor(Math.random() * arr.length)];
-}
+  /**
+   * @param {array} arr - an array of values to select from randomly
+   * @returns {any} Returns a random value from an array
+   */
 
-// computerPlay TDD:
-if (TEST) {
-  test(
-    true,
-    options.some(val => val === computerPlay(options))
-  );
-}
+  computerPlay: function (arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
+  },
 
-/**
- * @param {array} arr - an array of valid values to check the user's prompt response against
- * @returns {string} Returns the user's prompt response in lowercase if it matches any values in the array
- */
-function playerSelection(arr) {
-  let playerChoice;
+  /**
+   * @param {string} pC - the players selection
+   * @param {string} cC - the computers selection;
+   * @returns {number} returns a -1, 0, or 1 depending on whether the human loses, ties, or wins the round
+   */
 
-  while (!arr.some(val => val === playerChoice)) {
-    playerChoice = prompt("Please type rock, paper, or scissors:");
-  }
-  return playerChoice.toLowerCase();
-}
+  compareChoices: function compareChoices(pC, cC) {
+    // player loss
+    if (
+      (pC === "rock" && cC === "paper") ||
+      (pC === "paper" && cC === "scissors") ||
+      (pC === "scissors" && cC === "rock")
+    ) {
+      return -1;
 
-// playerSelection TDD:
-// difficult to test using TDD
+      // player win
+    } else if (
+      (pC === "rock" && cC === "scissors") ||
+      (pC === "paper" && cC === "rock") ||
+      (pC === "scissors" && cC === "paper")
+    ) {
+      return 1;
 
-/**
- * @returns {number} returns the result of compareChoices.
- */
-function playRound() {
-  // determine the players choice and the computers random choice
-  const playerChoice = playerSelection(options);
-  const computerChoice = computerPlay(options);
-
-  // compare the choices to determine a winner and print the results
-  return compareChoices(playerChoice, computerChoice);
-}
-
-/**
- * @param {string} pC - the players selection
- * @param {string} cC - the computers selection;
- * @returns {number} returns a -1, 0, or 1 depending on whether the human loses, ties, or wins the round
- */
-function compareChoices(pC, cC) {
-  if (
-    (pC === "rock" && cC === "paper") ||
-    (pC === "paper" && cC === "scissors") ||
-    (pC === "scissors" && cC === "rock")
-  ) {
-    console.log(`You lose! ${cC} beats ${pC}.`);
-    return -1;
-  } else if (
-    (pC === "rock" && cC === "scissors") ||
-    (pC === "paper" && cC === "rock") ||
-    (pC === "scissors" && cC === "paper")
-  ) {
-    console.log(`You win! ${pC} beats ${cC}.`);
-    return 1;
-  } else {
-    console.log(`You tie! ${pC} vs. ${cC}.`);
-    return 0;
-  }
-}
-
-/**
- * @param {number} rounds
- */
-function game(rounds) {
-  let wins = 0;
-  for (let i = 0; i < rounds; i++) {
-    wins += playRound();
-    if (wins === 0 && i === rounds) {
-      console.log("Tiebreaker!");
-      i--;
+      // tie
+    } else {
+      return 0;
     }
-  }
-  return printWinner(wins);
-}
+  },
 
-/**
- * @param {number} wins
- */
-function printWinner(wins) {
-  if (wins > 0) {
-    console.log("You won!");
-  } else {
-    console.log("The computer won...");
-  }
-}
+  /**
+   * @param {number} result - -1 for a computer win, 0 for a tie, 1 for a player win.
+   * @returns {side-effect} updates the value of playerWins or compWins
+   */
+
+  updateWins: function (result) {
+    if (result === -1) {
+      this.compWins++;
+    } else if (result === 1) {
+      this.playerWins++;
+    }
+  },
+
+  /**
+   * @returns {side-effect} updates the innerText of IDs player-wins and computer-wins
+   */
+
+  updateWinsText: function () {
+    document.getElementById("player-wins").innerText = `${this.playerWins}`;
+    document.getElementById("computer-wins").innerText = `${this.compWins}`;
+  },
+};
+
+document.getElementById("rock").addEventListener("click", function () {
+  game.play("rock");
+});
+document.getElementById("scissors").addEventListener("click", function () {
+  game.play("scissors");
+});
+document.getElementById("paper").addEventListener("click", function () {
+  game.play("paper");
+});
